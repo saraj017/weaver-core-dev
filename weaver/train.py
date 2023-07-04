@@ -702,7 +702,7 @@ def _main(args):
         dev = torch.device('cpu')
     
     # torch configs
-    torch.set_float32_matmul_precision('high')
+    # torch.set_float32_matmul_precision('high')
 
     # load data
     if training_mode:
