@@ -4,6 +4,8 @@
 ## Note: hww has fake fj_isQCD=1.. However in below selection we do not select label_H_wwunmatch in training pool
 selection: >-
   (fj_pt>0)
+## if it's a higgs then it has to be matched (note: fj_genRes_mass=125 for higgs else 0)
+( (fj_genRes_mass==125) & matched_mask ) | ( fj_genRes_mass!=0 )
 
 ### selection to apply at test time (i.e., when running w/ --predict)
 # note that we use variable-mass ttbar for training, but only 1/7 of the Z'-> SM ttbar sample for reference
@@ -16,14 +18,21 @@ new_variables:
 
     label_unmatched: ~(matched_mask)   # target=genjetmass
 
-    label_H: (matched_mask) & (fj_lepinprongs ==1) & (fj_nquarks==2)   # target=125
+    label_H: (matched_mask) & (fj_lepinprongs==1) & (fj_nquarks==2)   # target=125
 
     label_QCD: (matched_mask) & ( (fj_QCDb>0) | (fj_QCDbb>0) | (fj_QCDc>0) | (fj_QCDcc>0) | (fj_QCDothers>0) )  # target=genjetmass
 
-    label_Top_W: (matched_mask) & (fj_Top_nbquarks==0) & (fj_Top_nleptons>0)  # target=80
-    label_Top_bW: (matched_mask) & (fj_Top_nbquarks>0) & (fj_Top_nleptons>0)  # target=170
+    label_W: (matched_mask) & ( (fj_lepinprongs>0) )  # target=80
 
-    label_W_merged: (matched_mask) & ( (fj_V_elenu>0) | (fj_V_munu>0) )  # target=80
+    label_Top_W: (matched_mask) & (fj_Top_nbquarks==0) & (fj_Top_nleptons>0)  # target=80
+    label_Top_bW: (matched_mask) & (fj_Top_nbquarks>0) & (fj_Top_nleptons>0)  # target=175
+    
+    ### useful to define classes    
+    label_H_unmatched: ~label_H   # target=genjetmass
+    label_W_unmatched: ~label_W  # target=genjetmass
+    label_Top_unmatched: (~label_Top_W) | (~label_Top_bW)  # target=genjetmass
+
+    classes: (1*label_H) + (2*label_QCD) + (3*label_W) + (4*label_Top_W) + (5*label_Top_bW) + (6*label_H_unmatched) + (6*label_W_unmatched) + (7*label_Top_unmatched)
 
 preprocess:
   ### method: [manual, auto] - whether to use manually specified parameters for variable standardization
@@ -222,7 +231,7 @@ labels:
     ### [option 2] otherwise use `custom` to define the label, then `value` is a map
     type: custom
     value:
-      target_mass: (125 * label_H) + (125 * label_Top_bW) + (80 * label_Top_W) + (80 * label_W_merged) + (fj_genjetmass * label_QCD) + (fj_genjetmass * label_unmatched)
+      target_mass: (125 * label_H) + (175 * label_Top_bW) + (80 * label_Top_W) + (80 * label_W) + (fj_genjetmass * label_QCD) + (fj_genjetmass * label_unmatched)
 
 observers:
     - fj_pt
@@ -230,6 +239,7 @@ observers:
     - fj_eta
     - fj_phi
     - fj_ParT_mass
+    - classes
 
 weights:
     ### [option 1] use precomputed weights stored in the input files
