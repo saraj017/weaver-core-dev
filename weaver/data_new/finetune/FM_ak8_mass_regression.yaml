@@ -3,7 +3,7 @@
 
 ## Note: hww has fake fj_isQCD=1.. However in below selection we do not select label_H_wwunmatch in training pool
 selection: >-
-  (fj_pt>0)
+  (fj_pt>0) &
 ## if it's a higgs then it has to be matched (note: fj_genRes_mass=125 for higgs else 0)
 ( (fj_genRes_mass==125) & matched_mask ) | ( fj_genRes_mass!=0 )
 
