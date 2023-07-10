@@ -1,15 +1,12 @@
 ### use `&`, `|`, `~` for logical operations on numpy arrays
 ### can use functions from `math`, `np` (numpy), and `ak` in the expression
 
-## Note: hww has fake fj_isQCD=1.. However in below selection we do not select label_H_wwunmatch in training pool
+## Note: if it's a higgs then it has to be matched (note: fj_genRes_mass=125 for higgs else 0)
 selection: >-
   (fj_pt>0) &
   ( (fj_genRes_mass==125) & matched_mask ) | ( fj_genRes_mass!=0 )
-## if it's a higgs then it has to be matched (note: fj_genRes_mass=125 for higgs else 0)
-  # ( (fj_genRes_mass==125) & matched_mask ) | ( fj_genRes_mass!=0 )
 
 ### selection to apply at test time (i.e., when running w/ --predict)
-# note that we use variable-mass ttbar for training, but only 1/7 of the Z'-> SM ttbar sample for reference
 test_time_selection: >-
   (fj_pt>0)
 
