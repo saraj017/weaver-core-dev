@@ -4,11 +4,12 @@
 ## Note: if it's a higgs then it has to be matched (note: fj_genRes_mass=125 for higgs else 0)
 selection: >-
   (fj_pt>0) &
-  ( (fj_genRes_mass==125) & matched_mask ) | ( fj_genRes_mass!=125 )
+  ( (fj_genRes_mass==125) & (matched_mask) & ((fj_H_VV_elenuqq==1) | (fj_H_VV_munuqq==1)) & (fj_lepinprongs==1) & (fj_nquarks==2) ) | (fj_genRes_mass!=125)
 
 ### selection to apply at test time (i.e., when running w/ --predict)
 test_time_selection: >-
-  (fj_pt>0)
+  (fj_pt>0) &
+  ( (fj_genRes_mass==125) & (matched_mask) & ((fj_H_VV_elenuqq==1) | (fj_H_VV_munuqq==1)) & (fj_lepinprongs==1) & (fj_nquarks==2) ) | (fj_genRes_mass!=125)
 
 new_variables:
     ### [format] name: formula
@@ -21,7 +22,7 @@ new_variables:
     class_Top: ( (~class_QCD) & (~class_W) & (~class_H) )
 
     # make matched and unmatched labels from the classes above
-    label_H: (class_H) & (fj_lepinprongs==1) & (fj_nquarks==2)   # target=125
+    label_H: (class_H)   # target=125 (note: preselection include only semileptonic higgs decays)
     label_W: (class_W) & (matched_mask) & ( (fj_lepinprongs>0) )  # target=80
     label_Top_W: (class_Top) & (matched_mask) & (fj_Top_nbquarks==0) & (fj_Top_nleptons>0)  # target=80
     label_Top_bW: (class_Top) & (matched_mask) & (fj_Top_nbquarks>0) & (fj_Top_nleptons>0)  # target=175
@@ -239,30 +240,30 @@ observers:
     - fj_ParT_probTopbWtauev
     - fj_ParT_probTopbWtaumv    
 
-weights:
-    ### [option 1] use precomputed weights stored in the input files
-    # use_precomputed_weights: true
-    # weight_branches: [weight, class_weight]
-    ### [option 2] compute weights on-the-fly using reweighting histograms
-   use_precomputed_weights: false
-   reweight_method: flat
-   reweight_vars:
-      fj_pt: [200, 251, 316, 398, 501, 630, 793, 997, 1255, 1579, 1987, 2500]
-      fj_msoftdrop: [-10000, 10000]
-   reweight_classes: [
-      label_H,
-      label_W,
-      label_Top_W,
-      label_Top_bW,
-      label_QCD,
-      label_unmatched,
-      ]
-   class_weights: [
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      ]
-   reweight_hists:
+# weights:
+#     ### [option 1] use precomputed weights stored in the input files
+#     # use_precomputed_weights: true
+#     # weight_branches: [weight, class_weight]
+#     ### [option 2] compute weights on-the-fly using reweighting histograms
+#    use_precomputed_weights: false
+#    reweight_method: flat
+#    reweight_vars:
+#       fj_pt: [200, 251, 316, 398, 501, 630, 793, 997, 1255, 1579, 1987, 2500]
+#       fj_msoftdrop: [-10000, 10000]
+#    reweight_classes: [
+#       label_H,
+#       label_W,
+#       label_Top_W,
+#       label_Top_bW,
+#       label_QCD,
+#       label_unmatched,
+#       ]
+#    class_weights: [
+#       1,
+#       2,
+#       2,
+#       2,
+#       2,
+#       2,
+#       ]
+#    reweight_hists:
