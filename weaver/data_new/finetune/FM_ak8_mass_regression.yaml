@@ -4,7 +4,7 @@
 ## Note: if it's a higgs then it has to be matched (note: fj_genRes_mass=125 for higgs else 0)
 selection: >-
   (fj_pt>0) &
-  ( (fj_genRes_mass==125) & matched_mask ) | ( fj_genRes_mass!=0 )
+  ( (fj_genRes_mass==125) & matched_mask ) | ( fj_genRes_mass!=125 )
 
 ### selection to apply at test time (i.e., when running w/ --predict)
 test_time_selection: >-
@@ -14,23 +14,20 @@ new_variables:
     ### [format] name: formula
     ### can use functions from `math`, `np` (numpy), and `ak` in the expression
 
-    label_unmatched: ~(matched_mask)   # target=genjetmass
+    # labels the sample
+    class_H: ( (fj_genRes_mass==125) )
+    class_W: ( (fj_V_2q==1) | (fj_V_elenu==1) | (fj_V_munu==1) | (fj_V_taunu==1) )
+    class_QCD: ( (fj_QCDb==1) | (fj_QCDbb==1) | (fj_QCDc==1) | (fj_QCDcc==1) | (fj_QCDothers==1) )
+    class_Top: ( (~class_QCD) & (~class_W) & (~class_H) )
 
-    label_H: (matched_mask) & (fj_lepinprongs==1) & (fj_nquarks==2)   # target=125
-
-    label_QCD: (matched_mask) & ( (fj_QCDb>0) | (fj_QCDbb>0) | (fj_QCDc>0) | (fj_QCDcc>0) | (fj_QCDothers>0) )  # target=genjetmass
-
-    label_W: (matched_mask) & ( (fj_lepinprongs>0) )  # target=80
-
-    label_Top_W: (matched_mask) & (fj_Top_nbquarks==0) & (fj_Top_nleptons>0)  # target=80
-    label_Top_bW: (matched_mask) & (fj_Top_nbquarks>0) & (fj_Top_nleptons>0)  # target=175
+    # make matched and unmatched labels from the classes above
+    label_H: (class_H) & (fj_lepinprongs==1) & (fj_nquarks==2)   # target=125
+    label_W: (class_W) & (matched_mask) & ( (fj_lepinprongs>0) )  # target=80
+    label_Top_W: (class_Top) & (matched_mask) & (fj_Top_nbquarks==0) & (fj_Top_nleptons>0)  # target=80
+    label_Top_bW: (class_Top) & (matched_mask) & (fj_Top_nbquarks>0) & (fj_Top_nleptons>0)  # target=175
+    label_QCD: (class_QCD) & (matched_mask)  # target=genjetmass
     
-    ### useful to define classes    
-    label_H_unmatched: ~label_H   # target=genjetmass
-    label_W_unmatched: ~label_W  # target=genjetmass
-    label_Top_unmatched: (~label_Top_W) | (~label_Top_bW)  # target=genjetmass
-
-    classes: (1*label_H) + (2*label_QCD) + (3*label_W) + (4*label_Top_W) + (5*label_Top_bW) + (6*label_H_unmatched) + (6*label_W_unmatched) + (7*label_Top_unmatched)
+    label_unmatched: (~label_H) & (~label_QCD) & (~label_W) & (~label_Top_W) & (~label_Top_bW)  # target=genjetmass
 
 preprocess:
   ### method: [manual, auto] - whether to use manually specified parameters for variable standardization
@@ -52,43 +49,6 @@ inputs:
    highlevel:
       length: null
       vars:
-        #  - fj_ParT_probHWqqWqq0c
-        #  - fj_ParT_probHWqqWqq1c
-        #  - fj_ParT_probHWqqWqq2c
-        #  - fj_ParT_probHWqqWq0c
-        #  - fj_ParT_probHWqqWq1c
-        #  - fj_ParT_probHWqqWq2c
-        #  - fj_ParT_probHWqqWev0c
-        #  - fj_ParT_probHWqqWev1c
-        #  - fj_ParT_probHWqqWmv0c
-        #  - fj_ParT_probHWqqWmv1c
-        #  - fj_ParT_probHWqqWtauev0c
-        #  - fj_ParT_probHWqqWtauev1c
-        #  - fj_ParT_probHWqqWtaumv0c
-        #  - fj_ParT_probHWqqWtaumv1c
-        #  - fj_ParT_probHWqqWtauhv0c
-        #  - fj_ParT_probHWqqWtauhv1c
-        #  - fj_ParT_probHbb
-        #  - fj_ParT_probHcc
-        #  - fj_ParT_probHss
-        #  - fj_ParT_probHqq
-        #  - fj_ParT_probHtauhtaue
-        #  - fj_ParT_probHtauhtaum
-        #  - fj_ParT_probHtauhtauh
-        #  - fj_ParT_probQCDbb
-        #  - fj_ParT_probQCDcc
-        #  - fj_ParT_probQCDb
-        #  - fj_ParT_probQCDc
-        #  - fj_ParT_probQCDothers
-        #  - fj_ParT_probTopbWqq0c
-        #  - fj_ParT_probTopbWqq1c
-        #  - fj_ParT_probTopbWq0c
-        #  - fj_ParT_probTopbWq1c
-        #  - fj_ParT_probTopbWev
-        #  - fj_ParT_probTopbWmv
-        #  - fj_ParT_probTopbWtauhv
-        #  - fj_ParT_probTopbWtauev
-        #  - fj_ParT_probTopbWtaumv
          - fj_ParT_hidNeuron000
          - fj_ParT_hidNeuron001
          - fj_ParT_hidNeuron002
@@ -229,18 +189,80 @@ labels:
     ### [option 2] otherwise use `custom` to define the label, then `value` is a map
     type: custom
     value:
-      target_mass: (125 * label_H) + (175 * label_Top_bW) + (80 * label_Top_W) + (80 * label_W) + (fj_genjetmass * label_QCD) + (fj_genjetmass * label_unmatched)
-
+      target_mass: (125 * label_H) + (80 * label_W) + (80 * label_Top_W) + (175 * label_Top_bW) + (fj_genjetmass * label_QCD) + (fj_genjetmass * label_unmatched)
+      
 observers:
     - fj_pt
     - fj_msoftdrop
     - fj_eta
     - fj_phi
     - fj_ParT_mass
-    - classes
+    - class_H
+    - class_W
+    - class_QCD
+    - class_Top
+    - fj_ParT_probHWqqWqq0c
+    - fj_ParT_probHWqqWqq1c
+    - fj_ParT_probHWqqWqq2c
+    - fj_ParT_probHWqqWq0c
+    - fj_ParT_probHWqqWq1c
+    - fj_ParT_probHWqqWq2c
+    - fj_ParT_probHWqqWev0c
+    - fj_ParT_probHWqqWev1c
+    - fj_ParT_probHWqqWmv0c
+    - fj_ParT_probHWqqWmv1c
+    - fj_ParT_probHWqqWtauev0c
+    - fj_ParT_probHWqqWtauev1c
+    - fj_ParT_probHWqqWtaumv0c
+    - fj_ParT_probHWqqWtaumv1c
+    - fj_ParT_probHWqqWtauhv0c
+    - fj_ParT_probHWqqWtauhv1c
+    - fj_ParT_probHbb
+    - fj_ParT_probHcc
+    - fj_ParT_probHss
+    - fj_ParT_probHqq
+    - fj_ParT_probHtauhtaue
+    - fj_ParT_probHtauhtaum
+    - fj_ParT_probHtauhtauh
+    - fj_ParT_probQCDbb
+    - fj_ParT_probQCDcc
+    - fj_ParT_probQCDb
+    - fj_ParT_probQCDc
+    - fj_ParT_probQCDothers
+    - fj_ParT_probTopbWqq0c
+    - fj_ParT_probTopbWqq1c
+    - fj_ParT_probTopbWq0c
+    - fj_ParT_probTopbWq1c
+    - fj_ParT_probTopbWev
+    - fj_ParT_probTopbWmv
+    - fj_ParT_probTopbWtauhv
+    - fj_ParT_probTopbWtauev
+    - fj_ParT_probTopbWtaumv    
 
 weights:
     ### [option 1] use precomputed weights stored in the input files
     # use_precomputed_weights: true
     # weight_branches: [weight, class_weight]
     ### [option 2] compute weights on-the-fly using reweighting histograms
+   use_precomputed_weights: false
+   reweight_method: flat
+   reweight_vars:
+      fj_pt: [200, 251, 316, 398, 501, 630, 793, 997, 1255, 1579, 1987, 2500]
+      fj_msoftdrop: [-10000, 10000]
+   reweight_classes: [
+      label_H,
+      label_W,
+      label_Top_W,
+      label_Top_bW,
+      label_QCD,
+      label_unmatched,
+      ]
+   class_weights: [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      ]
+   reweight_hists:
