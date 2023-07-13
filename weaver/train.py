@@ -553,8 +553,8 @@ def model_setup(args, data_config):
         if args.load_model_weights == 'finetune_gghww_custom':
             model_state = torch.load("/fmhwwvol/ak8_MD_vminclv2ParT_manual_fixwrap_all_nodes/net_best_epoch_state.pt", map_location='cpu')
             state_dict = model.state_dict()
-            state_dict['mlp.0.weight'].copy_(model_state['part.fc.0.weight'][-1:].data)
-            state_dict['mlp.0.bias'].copy_(model_state['part.fc.0.bias'][-1:].data)
+            state_dict['mlp.0.0.weight'].copy_(model_state['part.fc.0.weight'][-1:].data)
+            state_dict['mlp.0.0.bias'].copy_(model_state['part.fc.0.bias'][-1:].data)
         else:
             model_state = torch.load(args.load_model_weights, map_location='cpu')
             missing_keys, unexpected_keys = model.load_state_dict(model_state, strict=False)
