@@ -551,7 +551,7 @@ def model_setup(args, data_config):
         model = torch.compile(model)
     if args.load_model_weights:
         if args.load_model_weights == 'finetune_gghww_custom':
-            model_state = torch.load("/home/olympus/licq/hww/incl-train/weaver-core/weaver/model/ak8_MD_vminclv2ParT_manual_fixwrap/net_best_epoch_state.pt", map_location='cpu')
+            model_state = torch.load("/fmhwwvol/ak8_MD_vminclv2ParT_manual_fixwrap_all_nodes/net_best_epoch_state.pt", map_location='cpu')
             state_dict = model.state_dict()
             state_dict['mlp.0.weight'].copy_(model_state['part.fc.0.weight'][-1:].data)
             state_dict['mlp.0.bias'].copy_(model_state['part.fc.0.bias'][-1:].data)
