@@ -197,12 +197,49 @@ observers:
     - fj_msoftdrop
     - fj_eta
     - fj_phi
+    - fj_ParT_mass
     - class_H
     - class_W
     - class_QCD
     - class_Top
-    - fj_ParT_mass
-    - fj_ParT_inclusive_score   
+    - fj_Top_nquarksnob
+    - fj_ParT_probHWqqWqq0c
+    - fj_ParT_probHWqqWqq1c
+    - fj_ParT_probHWqqWqq2c
+    - fj_ParT_probHWqqWq0c
+    - fj_ParT_probHWqqWq1c
+    - fj_ParT_probHWqqWq2c
+    - fj_ParT_probHWqqWev0c
+    - fj_ParT_probHWqqWev1c
+    - fj_ParT_probHWqqWmv0c
+    - fj_ParT_probHWqqWmv1c
+    - fj_ParT_probHWqqWtauev0c
+    - fj_ParT_probHWqqWtauev1c
+    - fj_ParT_probHWqqWtaumv0c
+    - fj_ParT_probHWqqWtaumv1c
+    - fj_ParT_probHWqqWtauhv0c
+    - fj_ParT_probHWqqWtauhv1c
+    - fj_ParT_probHbb
+    - fj_ParT_probHcc
+    - fj_ParT_probHss
+    - fj_ParT_probHqq
+    - fj_ParT_probHtauhtaue
+    - fj_ParT_probHtauhtaum
+    - fj_ParT_probHtauhtauh
+    - fj_ParT_probQCDbb
+    - fj_ParT_probQCDcc
+    - fj_ParT_probQCDb
+    - fj_ParT_probQCDc
+    - fj_ParT_probQCDothers
+    - fj_ParT_probTopbWqq0c
+    - fj_ParT_probTopbWqq1c
+    - fj_ParT_probTopbWq0c
+    - fj_ParT_probTopbWq1c
+    - fj_ParT_probTopbWev
+    - fj_ParT_probTopbWmv
+    - fj_ParT_probTopbWtauhv
+    - fj_ParT_probTopbWtauev
+    - fj_ParT_probTopbWtaumv    
 
 weights:
     ### [option 1] use precomputed weights stored in the input files
