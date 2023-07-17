@@ -20,7 +20,7 @@ class MultiLayerPerceptron2Path(nn.Module):
     """
 
     def __init__(self, preinput_dims, input_dims, num_classes,
-                 prelayer_params=(32, 32), layer_params=(),
+                 prelayer_params=(256, 256), layer_params=(),
                  **kwargs):
 
         self.neurons_in_preprocess = kwargs.pop('neurons_in_preprocess', False)
