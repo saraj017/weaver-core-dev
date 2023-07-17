@@ -197,6 +197,7 @@ observers:
     - fj_msoftdrop
     - fj_eta
     - fj_phi
+    - fj_Top_nquarksnob
     - class_H
     - class_W
     - class_QCD
