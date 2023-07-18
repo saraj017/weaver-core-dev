@@ -8,13 +8,13 @@ python -u weaver/train.py \
  --data-test '/fmhwwvol/ntuples/*/test/*.root' \
  --data-config weaver/data_new/finetune/FM_ak8_mass_regression.yaml \
  --network-config weaver/networks/fintune_test/mlp_2p_gated_regression.py \
- --model-prefix /fmhwwvol/experiments/mass_regression_custom_highlr/model \
- --log-file /fmhwwvol/experiments/mass_regression_custom_highlr/logs/train.log \
- --predict-output /fmhwwvol/experiments/mass_regression_custom_highlr/predict/pred.root \
+ --model-prefix /fmhwwvol/experiments/mass_regression_test_highlr/model \
+ --log-file /fmhwwvol/experiments/mass_regression_test_highlr/logs/train.log \
+ --predict-output /fmhwwvol/experiments/mass_regression_test_highlr/predict/pred.root \
  --num-workers 0 \
  --in-memory \
  --steps-per-epoch=1 \
- --tensorboard _custom_highlr \
- --load-model-weights finetune_gghww_custom \
+ --tensorboard _test_highlr \
+#  --load-model-weights finetune_gghww_custom \
 
 mv runs/* /fmhwwvol/runs/
