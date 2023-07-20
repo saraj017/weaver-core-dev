@@ -53,7 +53,7 @@ class MultiLayerPerceptron2Path(nn.Module):
 
 def get_model(data_config, **kwargs):
     cfg = dict(
-        prelayer_params=(256, 256),
+        prelayer_params=(32, 32),
         layer_params=(),
     )
     cfg.update(**kwargs)
