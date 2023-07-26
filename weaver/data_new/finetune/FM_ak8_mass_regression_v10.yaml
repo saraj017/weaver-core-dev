@@ -16,12 +16,14 @@ new_variables:
     ### can use functions from `math`, `np` (numpy), and `ak` in the expression
 
     class_H: ( (fj_genRes_mass==125) )   # target=125 (note: preselection include only semileptonic higgs decays)
-    class_QCD: (( (fj_QCDb==1) | (fj_QCDbb==1) | (fj_QCDc==1) | (fj_QCDcc==1) | (fj_QCDothers==1) )) & (matched_mask)  # target=genjetmass    
-    class_W: (( (fj_V_2q==1) | (fj_V_elenu==1) | (fj_V_munu==1) | (fj_V_taunu==1) )) & (matched_mask) & ( (fj_lepinprongs>0) )  # target=80
+    class_QCD: (( (fj_QCDb==1) | (fj_QCDbb==1) | (fj_QCDc==1) | (fj_QCDcc==1) | (fj_QCDothers==1) ))  # target=genjetmass    
+    
+    class_W: (( (fj_V_2q==1) | (fj_V_elenu==1) | (fj_V_munu==1) | (fj_V_taunu==1) )) & (matched_mask) & ( (fj_lepinprongs>0) )  # target=80    
+    class_W_unmatched: (( (fj_V_2q==1) | (fj_V_elenu==1) | (fj_V_munu==1) | (fj_V_taunu==1) )) & (~class_W) # target=genjetmass    
+    
     class_Top_W: (( (~(( (fj_QCDb==1) | (fj_QCDbb==1) | (fj_QCDc==1) | (fj_QCDcc==1) | (fj_QCDothers==1) ))) & (~(( (fj_V_2q==1) | (fj_V_elenu==1) | (fj_V_munu==1) | (fj_V_taunu==1) ))) & (~(( (fj_genRes_mass==125) ))) )) & ( (fj_Top_nquarksnob==2) ) | ( (matched_mask) & (fj_Top_nbquarks==0) & (fj_Top_nleptons>0) & (fj_Top_nquarksnob == 2) )   # target=80
     class_Top_bW: (( (~(( (fj_QCDb==1) | (fj_QCDbb==1) | (fj_QCDc==1) | (fj_QCDcc==1) | (fj_QCDothers==1) ))) & (~(( (fj_V_2q==1) | (fj_V_elenu==1) | (fj_V_munu==1) | (fj_V_taunu==1) ))) & (~(( (fj_genRes_mass==125) ))) )) & (matched_mask) & (fj_Top_nbquarks>0) & (fj_Top_nleptons>0)  # target=175
-
-    class_unmatched: (~class_H) & (~class_QCD) & (~class_W) & (~class_Top_W) & (~class_Top_bW)  # target=genjetmass
+    class_Top_unmatched: (( (~(( (fj_QCDb==1) | (fj_QCDbb==1) | (fj_QCDc==1) | (fj_QCDcc==1) | (fj_QCDothers==1) ))) & (~(( (fj_V_2q==1) | (fj_V_elenu==1) | (fj_V_munu==1) | (fj_V_taunu==1) ))) & (~(( (fj_genRes_mass==125) ))) )) & (~class_Top_W) & (~class_Top_bW)   # target=genjetmass    
 
 preprocess:
   ### method: [manual, auto] - whether to use manually specified parameters for variable standardization
@@ -183,7 +185,7 @@ labels:
     ### [option 2] otherwise use `custom` to define the label, then `value` is a map
     type: custom
     value:
-      target_mass: (125 * class_H) + (80 * class_W) + (80 * class_Top_W) + (175 * class_Top_bW) + (fj_genjetmass * class_QCD) + (fj_genjetmass * class_unmatched)
+      target_mass: (125 * class_H) + (80 * class_W) + (80 * class_Top_W) + (175 * class_Top_bW) + (fj_genjetmass * class_QCD) + (fj_genjetmass * class_Top_unmatched) + (fj_genjetmass * class_W_unmatched)
 
 observers:
     - fj_pt
@@ -207,17 +209,19 @@ weights:
    reweight_discard_under_overflow: false
    reweight_method: flat
    reweight_vars:
-      fj_pt: [200, 251, 316, 398, 501, 630, 793, 997, 1255, 1579, 1987, 2500]
+      fj_pt: [200, 251, 316, 398, 501, 630, 793, 997, 1255, 1579]
       fj_msoftdrop: [-10000, 10000]
    reweight_classes: [
       class_H,
       class_QCD,
       class_W,
+      class_W_unmatched,
       class_Top_W,
       class_Top_bW,
-      class_unmatched,
+      class_Top_unmatched,
       ]
    class_weights: [
+      1,
       1,
       1,
       1,
