@@ -24,8 +24,8 @@ new_variables:
    label_H: ( (fj_genRes_mass==125) )
    label_QCD: (( (fj_QCDb==1) | (fj_QCDbb==1) | (fj_QCDc==1) | (fj_QCDcc==1) | (fj_QCDothers==1) )) & (matched_mask)  # target=genjetmass
    label_W: (( (fj_V_2q==1) | (fj_V_elenu==1) | (fj_V_munu==1) | (fj_V_taunu==1) )) & (matched_mask) & ( (fj_lepinprongs>0) )  # target=80
-   label_Top_W: (( (~class_QCD) & (~class_W) & (~class_H) )) & ( (fj_Top_nquarksnob==2) ) | ( (matched_mask) & (fj_Top_nbquarks==0) & (fj_Top_nleptons>0) & (fj_Top_nquarksnob == 2) )   # target=80
-   label_Top_bW: (( (~class_QCD) & (~class_W) & (~class_H) )) & (matched_mask) & (fj_Top_nbquarks>0) & (fj_Top_nleptons>0)  # target=175
+   label_Top_W: (( (~label_QCD) & (~label_W) & (~label_H) )) & ( (fj_Top_nquarksnob==2) ) | ( (matched_mask) & (fj_Top_nbquarks==0) & (fj_Top_nleptons>0) & (fj_Top_nquarksnob == 2) )   # target=80
+   label_Top_bW: (( (~label_QCD) & (~label_W) & (~label_H) )) & (matched_mask) & (fj_Top_nbquarks>0) & (fj_Top_nleptons>0)  # target=175
    label_unmatched: (~label_H) & (~label_QCD) & (~label_W) & (~label_Top_W) & (~label_Top_bW)  # target=genjetmass
 
 
