@@ -33,7 +33,7 @@ spec:
           --in-memory
           --steps-per-epoch=1
           --tensorboard _test) &&
-          mv runs/* /fmhwwvol/runs/
+          mv runs/* /fmhwwvol/runs_sara/
         volumeMounts:
         - mountPath: /fmhwwvol
           name: fmhwwvol
