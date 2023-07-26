@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: weaver-pod-test
+  name: weaver-pod-sara
 spec:
   # nodeName: suncave-27  
   containers:
   - name: gpu-container
     image: gitlab-registry.nrp-nautilus.io/jmduarte/weaver
-    command: ["/bin/bash", "-c", "git clone https://github.com/farakiko/weaver-core-dev.git && git config --global user.email farouk.mokhtar@gmail.com && git config --global user.name farakiko && alias tb='python -m tensorboard.main --logdir=runs/' && sleep infinity"]
+    command: ["/bin/bash", "-c", "git clone https://github.com/saraj017/weaver-core-dev.git && git config --global user.email sarajmorrissey@live.com && git config --global user.name saraj017 && alias tb='python -m tensorboard.main --logdir=runs/' && sleep infinity"]
     resources:
       limits:
         nvidia.com/gpu: 2
