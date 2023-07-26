@@ -22,7 +22,8 @@ new_variables:
     class_Top: ( (~class_QCD) & (~class_W) & (~class_H) )
 
     # make matched and unmatched labels from the classes above
-    label_H: (( (fj_genRes_mass==125) ))   # target=125 (note: preselection include only semileptonic higgs decays)
+   #  label_H: (( (fj_genRes_mass==125) ))   # target=125 (note: preselection include only semileptonic higgs decays)
+    label_H: (class_H)   # target=125 (note: preselection include only semileptonic higgs decays)
     label_W: (class_W) & (matched_mask) & ( (fj_lepinprongs>0) )  # target=80
     label_Top_W: (class_Top) & ( (fj_Top_nquarksnob==2) ) | ( (matched_mask) & (fj_Top_nbquarks==0) & (fj_Top_nleptons>0) & (fj_Top_nquarksnob == 2) )   # target=80
     label_Top_bW: (class_Top) & (matched_mask) & (fj_Top_nbquarks>0) & (fj_Top_nleptons>0)  # target=175
