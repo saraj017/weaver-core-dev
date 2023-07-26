@@ -209,9 +209,12 @@ observers:
     - fj_phi
     - fj_Top_nquarksnob
     - class_H
-    - class_W
     - class_QCD
-    - class_Top
+    - class_W
+    - class_W_unmatched
+    - class_Top_W
+    - class_Top_bW
+    - class_Top_unmatched
     - fj_ParT_mass
     - fj_ParT_inclusive_score   
 
