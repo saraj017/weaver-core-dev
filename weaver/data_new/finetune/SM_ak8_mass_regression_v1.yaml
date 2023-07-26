@@ -41,8 +41,7 @@ inputs:
    basic:
       length: null
       vars:
-         - fj_pt
-         - fj_msoftdrop         
+         - fj_pt         
          - fj_eta
          - fj_phi
          - met_relpt
