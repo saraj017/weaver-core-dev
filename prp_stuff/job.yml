@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: weaver-job-test
+  name: weaver-job-sara
   labels:
     app: weavertagger
 spec:
@@ -24,11 +24,11 @@ spec:
           --batch-size 768 --start-lr 6.75e-3 --num-epochs 4000 --optimizer ranger 
           --data-train '/fmhwwvol/ntuples/*/train/*.root' 
           --data-test '/fmhwwvol/ntuples/*/test/*.root' 
-          --data-config weaver/data_new/finetune/FM_ak8_mass_regression_v1.yaml 
+          --data-config weaver/data_new/finetune_sara/SM_ak8_mass_regression_v1.yaml 
           --network-config weaver/networks/fintune_test/mlp_2p_gated_regression.py 
-          --model-prefix /fmhwwvol/test_experiments/mass_regression_test/model
-          --log-file /fmhwwvol/test_experiments/mass_regression_test/logs/train.log 
-          --predict-output /fmhwwvol/test_experiments/mass_regression_test/predict/pred.root 
+          --model-prefix /fmhwwvol/test_experiments_sara/mass_regression_test1/model
+          --log-file /fmhwwvol/test_experiments_sara/mass_regression_test1/logs/train.log 
+          --predict-output /fmhwwvol/test_experiments_sara/mass_regression_test1/predict/pred.root 
           --num-workers 0
           --in-memory
           --steps-per-epoch=1
