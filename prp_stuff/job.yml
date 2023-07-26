@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: weaver-job-test
+  labels:
+    app: weavertagger
+spec:
+  template:
+    spec:
+      containers:
+      - name: container
+        image: gitlab-registry.nrp-nautilus.io/jmduarte/weaver
+        command:
+        - "/bin/bash"
+        - "-c"
+        - >
+          alias tb='python -m tensorboard.main --logdir=runs/' &&
+          git clone https://github.com/farakiko/weaver-core-dev.git &&
+          cd weaver-core-dev &&
+          mkdir -p /fmhwwvol/test_experiments/mass_regression_test &&
+          (python -u weaver/train.py 
+          --gpu "0,1" 
+          --train-mode regression 
+          --batch-size 768 --start-lr 6.75e-3 --num-epochs 4000 --optimizer ranger 
+          --data-train '/fmhwwvol/ntuples/*/train/*.root' 
+          --data-test '/fmhwwvol/ntuples/*/test/*.root' 
+          --data-config weaver/data_new/finetune/FM_ak8_mass_regression_v1.yaml 
+          --network-config weaver/networks/fintune_test/mlp_2p_gated_regression.py 
+          --model-prefix /fmhwwvol/test_experiments/mass_regression_test/model
+          --log-file /fmhwwvol/test_experiments/mass_regression_test/logs/train.log 
+          --predict-output /fmhwwvol/test_experiments/mass_regression_test/predict/pred.root 
+          --num-workers 0
+          --in-memory
+          --steps-per-epoch=1
+          --tensorboard _test) &&
+          mv runs/* /fmhwwvol/runs/
+        volumeMounts:
+        - mountPath: /fmhwwvol
+          name: fmhwwvol
+        resources:
+          limits:
+            memory: 64Gi
+            cpu: "2"
+            nvidia.com/gpu: "2"
+          requests:
+            memory: 12Gi
+            cpu: "2"
+            nvidia.com/gpu: "2"
+      volumes:
+      - name: fmhwwvol
+        persistentVolumeClaim:
+          claimName: fmhwwvol
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: nvidia.com/gpu.product
+                operator: In
+                values:
+                - NVIDIA-GeForce-GTX-1080-Ti
+
+      restartPolicy: Never
+  backoffLimit: 0
+
