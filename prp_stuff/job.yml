@@ -15,7 +15,7 @@ spec:
         - "-c"
         - >
           alias tb='python -m tensorboard.main --logdir=runs/' &&
-          git clone https://github.com/farakiko/weaver-core-dev.git &&
+          git clone https://github.com/saraj017/weaver-core-dev.git &&
           cd weaver-core-dev &&
           mkdir -p /fmhwwvol/test_experiments/mass_regression_test &&
           (python -u weaver/train.py 
