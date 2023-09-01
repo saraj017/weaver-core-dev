@@ -5,7 +5,7 @@ python -u weaver/train.py \
  --train-mode regression \
  --batch-size 768 --start-lr 6.75e-4 --num-epochs 3000 --optimizer ranger \
  --data-train '/fmhwwvol/ntuples/TTToSemiLeptonic/train/*.root' \
- --data-test '/fmhwwvol/ntuples/*/test/*.root' \
+ --data-test '/fmhwwvol/ntuples/TTToSemiLeptonic/test/*.root' \
  --data-config weaver/data_new/finetune/SM_ak8_mass_regression_v1.yaml \
  --network-config weaver/networks/fintune_test/mlp_2p_gated_regression.py \
  --model-prefix /fmhwwvol/experiments_sara/mass_regression_TTbar_ft_1/model \
