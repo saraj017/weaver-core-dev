@@ -8,14 +8,13 @@ python -u weaver/train.py \
  --data-test '/fmhwwvol/ntuples/*/test/*.root' \
  --data-config weaver/data_new/finetune/SM_ak8_mass_regression_v1.yaml \
  --network-config weaver/networks/fintune_test/mlp_2p_gated_regression.py \
- --model-prefix /fmhwwvol/experiments_sara/mass_regression_TTbar_ft_3/model \
- --log-file /fmhwwvol/experiments_sara/mass_regression_TTbar_ft_3/logs/train.log \
- --predict-output /fmhwwvol/experiments_sara/mass_regression_TTbar_ft_3/predict/pred.root \
+ --model-prefix /fmhwwvol/experiments_sara/mass_regression_TTbar_1/model \
+ --log-file /fmhwwvol/experiments_sara/mass_regression_TTbar_1/logs/train.log \
+ --predict-output /fmhwwvol/experiments_sara/mass_regression_TTbar_1/predict/pred.root \
  --num-workers 0 \
  --in-memory \
  --steps-per-epoch=1 \
  --tensorboard _v1 \
- --load-model-weights finetune_gghww_custom \
 
 mkdir -p /fmhwwvol/runs_sara/
 mv runs/* /fmhwwvol/runs_sara/
